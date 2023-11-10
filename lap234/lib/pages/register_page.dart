@@ -4,37 +4,45 @@ import 'package:lap234/components/my_button.dart';
 import 'package:lap234/components/my_textfield.dart';
 import 'package:lap234/helper/helper_functions.dart';
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
 
-  const LoginPage({super.key, required this.onTap});
+  const RegisterPage({super.key, required this.onTap});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
+  TextEditingController usernamecontroller = TextEditingController();
+
   TextEditingController emailcontroller = TextEditingController();
 
   TextEditingController passwordcontroller = TextEditingController();
 
-  void login() async {
-    showDialog(
-      context: context,
-      builder: (context) => const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-    try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
-          email: emailcontroller.text, password: passwordcontroller.text);
+  TextEditingController confirmPasswordcontroller = TextEditingController();
 
-      if (context.mounted) Navigator.pop(context);
-    } on FirebaseAuthException catch (e) {
-      // ignore: use_build_context_synchronously
+  void registerUser() async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(
+              child: CircularProgressIndicator(),
+            ));
+
+    if (passwordcontroller.text != confirmPasswordcontroller.text) {
       Navigator.pop(context);
-      // ignore: use_build_context_synchronously
-      displayMessageToUser(e.code, context);
+
+      displayMessageToUser('Password does not match', context);
+    } else {
+      try {
+        UserCredential? userCredential = await FirebaseAuth.instance
+            .createUserWithEmailAndPassword(
+                email: emailcontroller.text, password: passwordcontroller.text);
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        Navigator.pop(context);
+        displayMessageToUser(e.code, context);
+      }
     }
   }
 
@@ -68,6 +76,15 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 30,
               ),
+              MyTextField(
+                hinText: 'Username',
+                obscureText: false,
+                controller: usernamecontroller,
+              ),
+
+              const SizedBox(
+                height: 20,
+              ),
 
               ///email
               MyTextField(
@@ -90,25 +107,20 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 10,
               ),
-
-              ///forgot password
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text('Forgot Password?',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.inversePrimary,
-                      )),
-                ],
+              MyTextField(
+                hinText: 'Comfirm Password',
+                obscureText: true,
+                controller: confirmPasswordcontroller,
               ),
+
               const SizedBox(
-                height: 10,
+                height: 20,
               ),
 
-              ///login button
+              ///register button
               MyButton(
-                text: 'Login',
-                onTap: login,
+                text: 'Register',
+                onTap: registerUser,
               ),
               const SizedBox(
                 height: 10,
@@ -124,8 +136,8 @@ class _LoginPageState extends State<LoginPage> {
                       )),
                   GestureDetector(
                     onTap: widget.onTap,
-                    child: const Text(
-                      ' Register Here',
+                    child: Text(
+                      ' Login Here',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),

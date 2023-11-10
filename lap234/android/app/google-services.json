@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "666516030973",
+    "project_id": "lap234",
+    "storage_bucket": "lap234.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:666516030973:android:6ac8c2abd70af86e268594",
+        "android_client_info": {
+          "package_name": "com.example.lap234"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDDMG8JrYnmVI_0Ik4L2GEqdqt0bVuRhc4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
